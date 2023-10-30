@@ -29,16 +29,16 @@ My base template:
 	   </head>
 	   <body>
 	   <!-- Navbar -->
-	     <header>
-	       <nav id="nav_container">
-	         <ul>
-                      <li class="url_inline"><a href="{% url 'comic_home' %}">Home</a></li>
-                      <li class="url_inline"><a href="{% url 'comic_create' %}">Create</a></li>
-                      <li class="url_inline"><a href="{% url 'comic_read' %}">Read</a></li>
-                      <li class="url_inline"><a href="{% url 'comic_bs' %}">BeautifulSoup</a></li>
-                      <li class="url_inline"><a href="{% url 'comic_api' %}">API</a></li>
-	         </ul>
-	       </nav>
+	      <header>
+	         <nav id="nav_container">
+	            <ul>
+	               <li class="url_inline"><a href="{% url 'comic_home' %}">Home</a></li>
+	               <li class="url_inline"><a href="{% url 'comic_create' %}">Create</a></li>
+	               <li class="url_inline"><a href="{% url 'comic_read' %}">Read</a></li>
+	               <li class="url_inline"><a href="{% url 'comic_bs' %}">BeautifulSoup</a></li>
+	               <li class="url_inline"><a href="{% url 'comic_api' %}">API</a></li>
+	            </ul>
+	         </nav>
 	      </header>
 
 	   <!-- Main -->
@@ -48,9 +48,9 @@ My base template:
 	   </main>
 
 	   <!-- Footer -->
-	     <footer id="footer_container">
-	       <p id="footer_text">&copy; 2023 | Comic Collectors</p
-	     </footer>
+	   <footer id="footer_container">
+	      <p id="footer_text">&copy; 2023 | Comic Collectors</p
+	   </footer>
 	   </body>
 	</html>
 
@@ -154,21 +154,21 @@ My BeautifulSoup template:
 My BeautifulSoup function:
 
 	def comic_bs(request):
-	  page = requests.get("https://digitalcomicmuseum.com/")
-    	  soup = BeautifulSoup(page.content, 'html.parser')
-    	  tr_elements = soup.find_all("tr", class_="mainrow")
-    	  info = ''
+	   page = requests.get("https://digitalcomicmuseum.com/")
+	   soup = BeautifulSoup(page.content, 'html.parser')
+	   tr_elements = soup.find_all("tr", class_="mainrow")
+	   info = ''
 
-    	  for tr in tr_elements:
-	    td_elements = tr.find_all("td")
-	    if len(td_elements) > 1:
-              second_td = td_elements[1]
-              text = second_td.get_text().strip()
-              if not text.startswith('Latest Download:'):
-                info += text + '\n'
+	   for tr in tr_elements:
+	      td_elements = tr.find_all("td")
+	      if len(td_elements) > 1:
+	         second_td = td_elements[1]
+	         text = second_td.get_text().strip()
+	         if not text.startswith('Latest Download:'):
+	            info += text + '\n'
 
-	  content = {'info': info}
-	  return render(request, 'ComicBook/comic_bs.html', content)
+	   content = {'info': info}
+	   return render(request, 'ComicBook/comic_bs.html', content)
 
 
 ### API:
@@ -187,14 +187,15 @@ My API template:
 	      <h2>Comic Books</h2>
 	      <ul>
 	         {% for comic in api_data.data.results %}
-		    <li>
-		       <strong>Title:</strong> {{ comic.title }}<br>				<strong>Description:</strong> {{ comic.description }}<br>
-			<strong>Price:</strong> ${{ comic.prices.0.price }}<br>
-		    </li>
-                    <br>
-              	{% endfor %}
-	     </ul>
-	  </div>
+	            <li>
+	               <strong>Title:</strong> {{ comic.title }}<br>
+	               <strong>Description:</strong> {{ comic.description }}<br>
+	               <strong>Price:</strong> ${{ comic.prices.0.price }}<br>
+	            </li>
+	            <br>
+	         {% endfor %}
+	      </ul>
+	   </div>
 	{% endblock %}
 
 my API function:

@@ -21,63 +21,63 @@ My base template:
 	{% load static %}
 	<!DOCTYPE html>
 	<html lang="en">
-	  <head>
-	    <meta charset="UTF-8">
-	    <meta name="viewport" content="width=device-width, initial-scale=1">
-            <link rel="stylesheet" type="text/css" href="{% static 'css/comicbook_layout.css' %}">
-            <title>{% block title %}Comic Collectors{% endblock %}</title>
-    	  </head>
-    	  <body>
-    	  <!-- Navbar -->
-	    <header>
-	      <nav id="nav_container">
-                <ul>
-                  <li class="url_inline"><a href="{% url 'comic_home' %}">Home</a></li>
-                  <li class="url_inline"><a href="{% url 'comic_create' %}">Create</a></li>
-                  <li class="url_inline"><a href="{% url 'comic_read' %}">Read</a></li>
-                  <li class="url_inline"><a href="{% url 'comic_bs' %}">BeautifulSoup</a></li>
-                  <li class="url_inline"><a href="{% url 'comic_api' %}">API</a></li>
-              </ul>
-            </nav>
-          </header>
+	   <head>
+	      <meta charset="UTF-8">
+	      <meta name="viewport" content="width=device-width, initial-scale=1">
+	      <link rel="stylesheet" type="text/css" href="{% static 'css/comicbook_layout.css' %}">
+	      <title>{% block title %}Comic Collectors{% endblock %}</title>
+	   </head>
+	   <body>
+	   <!-- Navbar -->
+	     <header>
+	        <nav id="nav_container">
+                   <ul>
+                      <li class="url_inline"><a href="{% url 'comic_home' %}">Home</a></li>
+                      <li class="url_inline"><a href="{% url 'comic_create' %}">Create</a></li>
+                      <li class="url_inline"><a href="{% url 'comic_read' %}">Read</a></li>
+                      <li class="url_inline"><a href="{% url 'comic_bs' %}">BeautifulSoup</a></li>
+                      <li class="url_inline"><a href="{% url 'comic_api' %}">API</a></li>
+		    </ul>
+		  </nav>
+	       </header>
 
-          <!-- Main -->
-          <main>
-            {% block content %}
-            {% endblock %}
-          </main>
+	   <!-- Main -->
+	   <main>
+             {% block content %}
+             {% endblock %}
+           </main>
 
-          <!-- Footer -->
-            <footer id="footer_container">
-              <p id="footer_text">&copy; 2023 | Comic Collectors</p>
-            </footer>
-	  </body>
+	   <!-- Footer -->
+             <footer id="footer_container">
+               <p id="footer_text">&copy; 2023 | Comic Collectors</p>
+             </footer>
+	   </body>
 	</html>
 
 My Views Function:
 
 	def comic_home(request):
-	  return render(request, 'ComicBook/comic_home.html')
+	   return render(request, 'ComicBook/comic_home.html')
 
 
 ### Story 2-3:
-Story 2 required us to create a model and form for the comic book and to add Create functionality inside our views.py while story 3 made us display those comic book details for Read functionality.
+Story 2 required us to create a model + form for the comic book and to add create functionality inside our views. Story 3 made us display those comic book details for read functionality.
 
 The Model:
 
 	from django.db import models
 
 	class ComicBook(models.Model):
-    	  title = models.CharField(max_length=100)
-    	  publisher = models.CharField(max_length=50)
-    	  publication_date = models.CharField(max_length=25)
-    	  volume = models.IntegerField()
-    	  issue = models.IntegerField()
+	   title = models.CharField(max_length=100)
+    	   publisher = models.CharField(max_length=50)
+    	   publication_date = models.CharField(max_length=25)
+    	   volume = models.IntegerField()
+    	   issue = models.IntegerField()
 
-    	  Comics = models.Manager()
+    	   Comics = models.Manager()
 
-    	  def __str__(self):
-            return self.title
+	   def __str__(self):
+	      return self.title
 
 The Form:
 
@@ -85,20 +85,20 @@ The Form:
 	from .models import ComicBook
 
 	class ComicBookForm(ModelForm):
-    	  class Meta:
-            model = ComicBook
-            fields = '__all__'
+	   class Meta:
+	     model = ComicBook
+	     fields = '__all__'
 
 The views functions:
 
 	def comic_create(request):
-	  form = ComicBookForm(data=request.POST or None)
-    	  if request.method == 'POST':
-            if form.is_valid():
-              form.save()
-              return redirect('../read')
-    	  content = {'form': form}
-    	  return render(request, 'ComicBook/comic_create.html', content)
+	   form = ComicBookForm(data=request.POST or None)
+	   if request.method == 'POST':
+	      if form.is_valid():
+	         form.save()
+	         return redirect('../read')
+	   content = {'form': form}
+	   return render(request, 'ComicBook/comic_create.html', content)
 
 	def comic_read(request):
 	  entry = ComicBook.Comics.all()
@@ -110,22 +110,22 @@ The views functions:
 Finishing up on implementing our CRUD process, these two stories focused on creating update and delete functions.
 
 	def comic_update(request, pk):
-	  entry = get_object_or_404(ComicBook, pk=pk)
-    	  form = ComicBookForm(data=request.POST or None, instance=entry)
-    	  if request.method == 'POST':
-            if form.is_valid():
-              form.save()
-              return redirect('../../read')
-    	  content = {'form': form, 'entry': entry}
-    	  return render(request, 'ComicBook/comic_update.html', content)
+	   entry = get_object_or_404(ComicBook, pk=pk)
+	   form = ComicBookForm(data=request.POST or None, instance=entry)
+	   if request.method == 'POST':
+	      if form.is_valid():
+                 form.save()
+                 return redirect('../../read')
+	   content = {'form': form, 'entry': entry}
+	   return render(request, 'ComicBook/comic_update.html', content)
 
 	def comic_delete(request, pk):
-	  entry = get_object_or_404(ComicBook, pk=pk)
-	  if request.method == 'POST':
-	    entry.delete()
-	    return redirect('../../read')
-	  content = {'entry': entry}
-	  return render(request, 'ComicBook/comic_delete.html', content)
+	   entry = get_object_or_404(ComicBook, pk=pk)
+	   if request.method == 'POST':
+	      entry.delete()
+	      return redirect('../../read')
+	   content = {'entry': entry}
+	   return render(request, 'ComicBook/comic_delete.html', content)
 
 
 ## Data Scraping Stories:
@@ -181,20 +181,19 @@ My API template:
 	{% block title %}Marvel Comics API{% endblock %}
 
 	{% block content %}
-    	  <div id="api_container">
-            <h1>Marvel Comics API Response</h1>
+	   <div id="api_container">
+	      <h1>Marvel Comics API Response</h1>
 
-            <h2>Comic Books</h2>
-            <ul>
-              {% for comic in api_data.data.results %}
-                <li>
-                  <strong>Title:</strong> {{ comic.title }}<br>
-                  <strong>Description:</strong> {{ comic.description }}<br>
-                  <strong>Price:</strong> ${{ comic.prices.0.price }}<br>
-               	</li>
-                <br>
-              {% endfor %}
-	    </ul>
+	      <h2>Comic Books</h2>
+	      <ul>
+	         {% for comic in api_data.data.results %}
+		    <li>
+		       <strong>Title:</strong> {{ comic.title }}<br>				<strong>Description:</strong> {{ comic.description }}<br>
+			<strong>Price:</strong> ${{ comic.prices.0.price }}<br>
+		    </li>
+                    <br>
+              	{% endfor %}
+	     </ul>
 	  </div>
 	{% endblock %}
 

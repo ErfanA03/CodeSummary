@@ -41,16 +41,16 @@ My base template:
 	         </nav>
 	      </header>
 
-	   <!-- Main -->
-	   <main>
-	     {% block content %}
-	     {% endblock %}
-	   </main>
+	      <!-- Main -->
+	      <main>
+	         {% block content %}
+	         {% endblock %}
+	      </main>
 
-	   <!-- Footer -->
-	   <footer id="footer_container">
-	      <p id="footer_text">&copy; 2023 | Comic Collectors</p
-	   </footer>
+	      <!-- Footer -->
+	      <footer id="footer_container">
+	         <p id="footer_text">&copy; 2023 | Comic Collectors</p
+	      </footer>
 	   </body>
 	</html>
 

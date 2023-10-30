@@ -1,7 +1,7 @@
 # Live Project
 
 ## Introduction
-For the last two weeks of my time at the Tech Academy, I worked with my peers as a team on a project using the Django framework. This project is an interactive website for managing one's collections of things related to various hobbies, as well as API and Data Scraped content for those hobbies. Working with a framework such as Django has allowed me to quickly create templates and functionality while keeping everything clean and organized. Utilizing branches, communicating as a team, getting assigned user stories, and having the opportunity to quickly learn [BeautifulSoup](#BeautifulSoup)/[API](#API) data scraping was a great experience to get a feel for what a developer may exeperience on a day-to-day basis.
+For the last two weeks of my time at the Tech Academy, I worked with my peers as a team on a project using the Django framework. This project is an interactive website for managing one's collections of things related to various hobbies, as well as API and Data Scraped content for those hobbies. Working with a framework such as Django has allowed me to quickly create templates and functionality while keeping everything clean and organized. Utilizing branches, communicating as a team, getting assigned user stories, and having the opportunity to quickly learn [BeautifulSoup](#BeautifulSoup)/[API](#API) data scraping was a great experience to get a feel for what a developer may experience on a day-to-day basis.
 
 Below are descriptions of the stories I worked on, along with code snippets and navigation links. I also have some full code files in this repo for the larger functionalities I implemented.
 
@@ -17,6 +17,7 @@ Below are descriptions of the stories I worked on, along with code snippets and 
 For this first quick story, we were tasked with creating a new project app folder and to setup the essentials for our website (i.e. the templates, views, urls). I decided to pick a comic book website that implemented CRUD functionality so in my first user task, I made the base and home html templates, and added the views function.
 
 My base template:
+
 	{% load static %}
 	<!DOCTYPE html>
 	<html lang="en">
@@ -54,16 +55,17 @@ My base template:
 	</html>
 
 My Views Function:
+
 	def comic_home(request):
-	    return render(request, 'ComicBook/comic_home.html')
+	  return render(request, 'ComicBook/comic_home.html')
 
 
 ### Story 2-3:
 Story 2 required us to create a model and form for the comic book and to add Create functionality inside our views.py while story 3 made us display those comic book details for Read functionality.
 
 The Model:
-	from django.db import models
 
+	from django.db import models
 
 	class ComicBook(models.Model):
     	  title = models.CharField(max_length=100)
@@ -78,9 +80,9 @@ The Model:
             return self.title
 
 The Form:
+
 	from django.forms import ModelForm
 	from .models import ComicBook
-
 
 	class ComicBookForm(ModelForm):
     	  class Meta:
@@ -88,6 +90,7 @@ The Form:
             fields = '__all__'
 
 The views functions:
+
 	def comic_create(request):
 	  form = ComicBookForm(data=request.POST or None)
     	  if request.method == 'POST':
@@ -116,7 +119,6 @@ Finishing up on implementing our CRUD process, these two stories focused on crea
     	  content = {'form': form, 'entry': entry}
     	  return render(request, 'ComicBook/comic_update.html', content)
 
-
 	def comic_delete(request, pk):
 	  entry = get_object_or_404(ComicBook, pk=pk)
 	  if request.method == 'POST':
@@ -136,6 +138,7 @@ Finishing up on implementing our CRUD process, these two stories focused on crea
 For these next few stories, we were tasked with learning an easy-to-learn python library called BeautifulSoup that allows one to scrape data and parse through HTML/XML documents.
 
 My BeautifulSoup template:
+
 	{% extends "comic_base.html" %}
 
 	{% block title %}BeautifulSoup{% endblock %}
@@ -149,6 +152,7 @@ My BeautifulSoup template:
 	{% endblock %}
 
 My BeautifulSoup function:
+
 	def comic_bs(request):
 	  page = requests.get("https://digitalcomicmuseum.com/")
     	  soup = BeautifulSoup(page.content, 'html.parser')
@@ -171,6 +175,7 @@ My BeautifulSoup function:
 After the BeautifulSoup story, we were charged with the task of connecting to our chosen API and getting the JSON response, parsing through the JSON file returned and displaying the information.
 
 My API template:
+
 	{% extends "comic_base.html" %}
 
 	{% block title %}Marvel Comics API{% endblock %}
@@ -194,6 +199,7 @@ My API template:
 	{% endblock %}
 
 my API function:
+
 	def comic_api(request):
 	  # API authentication keys
     	  public_key = 'b7dce7b253b4abfc69250e57413bdc49'

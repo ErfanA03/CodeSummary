@@ -30,27 +30,27 @@ My base template:
 	   <body>
 	   <!-- Navbar -->
 	     <header>
-	        <nav id="nav_container">
-                   <ul>
+	       <nav id="nav_container">
+	         <ul>
                       <li class="url_inline"><a href="{% url 'comic_home' %}">Home</a></li>
                       <li class="url_inline"><a href="{% url 'comic_create' %}">Create</a></li>
                       <li class="url_inline"><a href="{% url 'comic_read' %}">Read</a></li>
                       <li class="url_inline"><a href="{% url 'comic_bs' %}">BeautifulSoup</a></li>
                       <li class="url_inline"><a href="{% url 'comic_api' %}">API</a></li>
-		    </ul>
-		  </nav>
-	       </header>
+	         </ul>
+	       </nav>
+	      </header>
 
 	   <!-- Main -->
 	   <main>
-             {% block content %}
-             {% endblock %}
-           </main>
+	     {% block content %}
+	     {% endblock %}
+	   </main>
 
 	   <!-- Footer -->
-             <footer id="footer_container">
-               <p id="footer_text">&copy; 2023 | Comic Collectors</p>
-             </footer>
+	     <footer id="footer_container">
+	       <p id="footer_text">&copy; 2023 | Comic Collectors</p
+	     </footer>
 	   </body>
 	</html>
 
@@ -69,12 +69,12 @@ The Model:
 
 	class ComicBook(models.Model):
 	   title = models.CharField(max_length=100)
-    	   publisher = models.CharField(max_length=50)
-    	   publication_date = models.CharField(max_length=25)
-    	   volume = models.IntegerField()
-    	   issue = models.IntegerField()
+	   publisher = models.CharField(max_length=50)
+	   publication_date = models.CharField(max_length=25)
+	   volume = models.IntegerField()
+	   issue = models.IntegerField()
 
-    	   Comics = models.Manager()
+	   Comics = models.Manager()
 
 	   def __str__(self):
 	      return self.title
@@ -200,35 +200,35 @@ My API template:
 my API function:
 
 	def comic_api(request):
-	  # API authentication keys
-    	  public_key = 'b7dce7b253b4abfc69250e57413bdc49'
-	  private_key = '7f49c7fed8b25d7695a3378e9027c2a515cdf5ed'
+	   # API authentication keys
+	   public_key = 'b7dce7b253b4abfc69250e57413bdc49'
+	   private_key = '7f49c7fed8b25d7695a3378e9027c2a515cdf5ed'
 
-    	  # Generate a timestamp and hash
-    	  timestamp = str(int(time.time()))
-    	  hash_input = f'{timestamp}{private_key}{public_key}'.encode('utf-8')
-    	  hash_value = hashlib.md5(hash_input).hexdigest()
+	   # Generate a timestamp and hash
+	   timestamp = str(int(time.time()))
+	   hash_input = f'{timestamp}{private_key}{public_key}'.encode('utf-8')
+	   hash_value = hashlib.md5(hash_input).hexdigest()
 
-    	  # Build the API request URL
-	  base_url = 'https://gateway.marvel.com/v1/public/comics'
-	  querystring = {
-	    'apikey': public_key,
-	    'ts': timestamp,
-	    'hash': hash_value,
-	  }
+	   # Build the API request URL
+	   base_url = 'https://gateway.marvel.com/v1/public/comics'
+	   querystring = {
+	      'apikey': public_key,
+	      'ts': timestamp,
+	      'hash': hash_value,
+	   }
 
-	  # Make the API request
-	  response = requests.get(base_url, params=querystring)
+	   # Make the API request
+	   response = requests.get(base_url, params=querystring)
 
-	  # Check if the request was successful
-	  if response.status_code == 200:
-	    api_data = response.json()
+	   # Check if the request was successful
+	   if response.status_code == 200:
+	      api_data = response.json()
 
-	  # Pass the JSON data to your API template
-	  context = {
-            'api_data': api_data
-	  }
-	  return render(request, 'ComicBook/comic_api.html', context)
+	   # Pass the JSON data to your API template
+	   context = {
+	      'api_data': api_data
+	   }
+	   return render(request, 'ComicBook/comic_api.html', context)
 
 
 
